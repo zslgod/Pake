@@ -192,7 +192,7 @@ jobs:
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.name }}-macOS
+          name: pake-app-macOS
           path: ${{ inputs.name }}.dmg
           retention-days: 3
 
@@ -200,7 +200,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.name }}-Linux-deb
+          name: pake-app-Linux-deb
           path: ${{ inputs.name }}.deb
           retention-days: 3
           if-no-files-found: ignore
@@ -209,7 +209,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.name }}-Linux-AppImage
+          name: pake-app-Linux-AppImage
           path: ${{ inputs.name }}.AppImage
           retention-days: 3
           if-no-files-found: ignore
@@ -218,7 +218,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.name }}-Windows
+          name: pake-app-Windows
           path: ${{ inputs.name }}.msi
           retention-days: 3
 
