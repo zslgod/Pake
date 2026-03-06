@@ -19,15 +19,15 @@ on:
       url:
         description: "Website URL"
         required: true
-        default:"./html/index.html"
+        default: "./html/index.html"
       name:
         description: "App name (lowercase for Linux)"
         required: true
-        default:"银通纸业"
+        default: "银通纸业"
       icon:
         description: "Icon URL, auto-fetch if empty"
         required: false
-        default:"./html/logo.png"
+        default: "./html/logo.png"
       width:
         description: "Window width (px)"
         required: false
