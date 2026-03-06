@@ -26,6 +26,11 @@ on:
       icon:
         description: "App Icon"
         required: false
+      use_local_file:
+        description: "Use local file for packaging (copy local folder recursively)"
+        required: false
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       name:
@@ -52,6 +57,11 @@ on:
         description: "App Icon"
         type: string
         required: false
+      use_local_file:
+        description: "Use local file for packaging (copy local folder recursively)"
+        required: false
+        type: boolean
+        default: false
     secrets:
       PAKE_SIGNING_IDENTITY:
         required: false
@@ -174,6 +184,10 @@ jobs:
             ARGS+=("--icon" "src-tauri/png/${{ inputs.name }}_512.png")
           fi
 
+          if [ "${{ inputs.use_local_file }}" == "true" ]; then
+            ARGS+=("--use-local-file")
+          fi
+
           # Build once with multiple targets (faster than separate builds)
           node dist/cli.js "${ARGS[@]}" --targets deb,appimage
 
@@ -215,6 +229,10 @@ jobs:
             ARGS+=("--icon" "${{ inputs.icon }}")
           elif [ -f "src-tauri/icons/${{ inputs.name }}.icns" ]; then
             ARGS+=("--icon" "src-tauri/icons/${{ inputs.name }}.icns")
+          fi
+
+          if [ "${{ inputs.use_local_file }}" == "true" ]; then
+            ARGS+=("--use-local-file")
           fi
 
           node dist/cli.js "${ARGS[@]}" --targets universal --multi-arch
@@ -280,6 +298,10 @@ jobs:
             $args += "--icon", "${{ inputs.icon }}"
           } elseif (Test-Path "src-tauri\png\${{ inputs.name }}_256.ico") {
             $args += "--icon", "src-tauri\png\${{ inputs.name }}_256.ico"
+          }
+
+          if ("${{ inputs.use_local_file }}" -eq "true") {
+            $args += "--use-local-file"
           }
 
           $args += "--targets", "x64"

@@ -19,20 +19,23 @@ on:
       url:
         description: "Website URL"
         required: true
+        default:"./html/index.html"
       name:
         description: "App name (lowercase for Linux)"
-        required: true
+        required: true,
+        default:"银通纸业"
       icon:
         description: "Icon URL, auto-fetch if empty"
-        required: false
+        required: false,
+        default:"./html/logo.png"
       width:
         description: "Window width (px)"
         required: false
-        default: "1200"
+        default: "1600"
       height:
         description: "Window height (px)"
         required: false
-        default: "780"
+        default: "800"
       fullscreen:
         description: "Start in fullscreen mode"
         required: false
@@ -52,7 +55,19 @@ on:
         description: "Package formats (comma-separated: deb,appimage,rpm)"
         required: false
         default: "deb"
-
+      use_local_file:
+        description: "Use local file for packaging (copy local folder recursively)"
+        required: false
+        type: boolean
+        default: true
+      installer_language:
+        description: "Installer language"
+        required: false
+        default: "zh-CN"
+        type: string
+        options:
+          - "en-US"
+          - "zh-CN"
 jobs:
   build:
     name: ${{ inputs.platform }}
@@ -128,6 +143,10 @@ jobs:
             ARGS+=("--targets" "${{ inputs.targets }}")
           fi
 
+          if [ "${{ inputs.use_local_file }}" == "true" ]; then
+            ARGS+=("--use-local-file")
+          fi
+
           echo "Running: node dist/cli.js ${ARGS[@]}"
           node dist/cli.js "${ARGS[@]}"
 
@@ -136,7 +155,8 @@ jobs:
         timeout-minutes: 25
         shell: pwsh
         run: |
-          $args = "${{ inputs.url }}", "--name", "${{ inputs.name }}"
+          $args = "${{ inputs.url }}", "--name", "${{ inputs.name }}" 
+          $args += "--installer-language", "${{ inputs.installer_language }}"
 
           if ("${{ inputs.icon }}" -ne "") {
             $args += "--icon", "${{ inputs.icon }}"
@@ -157,6 +177,11 @@ jobs:
           if ("${{ inputs.hide_title_bar }}" -eq "true") {
             $args += "--hide-title-bar"
           }
+
+          if ("${{ inputs.use_local_file }}" -eq "true") {
+            $args += "--use-local-file"
+          }
+
 
           Write-Host "Running: node dist/cli.js $($args -join ' ')"
           node dist/cli.js $args
