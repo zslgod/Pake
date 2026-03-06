@@ -22,11 +22,11 @@ on:
         default:"./html/index.html"
       name:
         description: "App name (lowercase for Linux)"
-        required: true,
+        required: true
         default:"银通纸业"
       icon:
         description: "Icon URL, auto-fetch if empty"
-        required: false,
+        required: false
         default:"./html/logo.png"
       width:
         description: "Window width (px)"
